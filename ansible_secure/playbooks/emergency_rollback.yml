@@ -1,0 +1,11 @@
+- hosts: local
+  tasks:
+    - name: Reset SELinux
+      selinux:
+        state: permissive
+
+    - name: Remove custom sudo rules
+      file:
+        path: "/etc/sudoers.d/{{ item.name }}"
+        state: absent
+      loop: "{{ users }}"

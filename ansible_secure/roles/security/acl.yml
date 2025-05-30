@@ -1,0 +1,17 @@
+- name: Set restrictive ACL for /shared
+  acl:
+    path: /shared
+    entity: "{{ item.name }}"
+    etype: user
+    permissions: "{{ item.acl.0.permissions }}"
+  loop: "{{ users }}"
+  when: item.acl is defined
+
+- name: Restrict sudo
+  template:
+    src: sudo/restrict.j2
+    dest: "/etc/sudoers.d/{{ item.name }}"
+    mode: 0440
+    validate: "visudo -cf %s"
+  loop: "{{ users }}"
+  when: item.sudo

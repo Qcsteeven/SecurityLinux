@@ -1,0 +1,26 @@
+- name: Enable SELinux
+  selinux:
+    policy: targeted
+    state: "{{ security.selinux }}"
+  when: ansible_os_family == 'RedHat' or ansible_distribution == 'Debian'
+
+- name: Configure firewall
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - 22   # SSH
+    - 80   # HTTP
+  when: security.firewall
+
+- name: Apply kernel hardening
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - { key: kernel.kptr_restrict, value: 2 }
+    - { key: net.ipv4.ip_forward, value: 0 }
+  when: security.kernel_hardening

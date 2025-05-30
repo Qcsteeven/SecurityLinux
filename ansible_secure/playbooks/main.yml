@@ -1,0 +1,9 @@
+---
+- hosts: local
+  vars_files:
+    - ../group_vars/all.yml
+  roles:
+    - base
+    - users
+    - security
+    - audit

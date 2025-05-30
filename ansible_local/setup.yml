@@ -1,0 +1,19 @@
+---
+- name: Local system configuration
+  hosts: local
+  become: true  # Используем sudo
+  tasks:
+    - name: Ensure test directory exists
+      file:
+        path: /tmp/ansible_test
+        state: directory
+        mode: 0755
+        owner: "{{ ansible_user }}"
+        
+    - name: Create test file with secure permissions
+      copy:
+        dest: /tmp/ansible_test/secure_file
+        content: "This file was created securely by Ansible"
+        mode: 0640
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"

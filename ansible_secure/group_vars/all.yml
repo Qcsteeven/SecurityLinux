@@ -1,0 +1,17 @@
+# Пользователи и группы
+users:
+  - name: alice
+    groups: developers
+    sudo: true
+    acl:
+      - path: /shared
+        permissions: rwx
+  - name: bob
+    groups: auditors
+    sudo: false
+
+# Настройки безопасности
+security:
+  selinux: enforcing
+  firewall: true
+  kernel_hardening: true
